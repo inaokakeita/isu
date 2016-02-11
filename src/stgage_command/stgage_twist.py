@@ -10,11 +10,11 @@ g_last_twist = None
 g_last_send_time = None
 g_vel_scales = [0.1, 0.1, 0.1]
 g_vel_ramps = [1, 1, 1] # units: meters per second^2
-g_stgage = None
+g_stg = [0.01, 0.01, 0.01, 0.01] #stgage sensor raw data
 g_seat_width=0.2
 g_seat_length=0.2
-g_stgage_pos_x = [0.0, 0.2, 0.2, 0.0]
-g_stgage_pos_y = [0.0, 0.0, 0.2, 0.2]
+g_stg_x = [0.0, 0.2, 0.2, 0.0]#straigngage sensor position 
+g_stg_y = [0.0, 0.0, 0.2, 0.2]
 
 def ramped_vel(v_prev, v_target, t_prev, t_now, ramp_rate):
   # compute maximum velocity step
@@ -35,13 +35,13 @@ def ramped_twist(prev, target, t_prev, t_now, ramps):
     tw.linear.y = ramped_vel(prev.linear.y, target.linear.y, t_prev,
                            t_now, ramps[1])
     return tw
-def calc_vel(stg,stg_x,stg_y,vel_max):
-    global g_seat_length, g_seat_width, g_stgage,g_stgage_pos_x,g_stgage_pos_y,g_vel_scales
+def calc_vel():
+    global g_seat_length, g_seat_width, g_stg,g_stg_x,g_stg_y,g_vel_scales
     tw = Twist()
-    tw.x=(stg[0]*stg_x[0]+stg[1]*stg_x[1]+stg[2]*stg_x[2]+stg[3]*stg_x[3])/(stg[0]+stg[1]+stg[2]+stg[3])
-    tw.y=(stg[0]*stg_y[0]+stg[1]*stg_y[1]+stg[2]*stg_y[2]+stg[3]*stg_y[3])/(stg[0]+stg[1]+stg[2]+stg[3])#calc Centor Of Gravity Position
-    tw.x=tw.x*(g_vel_scales[0]/g_seat_width)
-    tw.y=tw.y*(g_vel_scales[1]/g_seat_length)
+    tw.linear.x=(g_stg[0]*g_stg_x[0]+g_stg[1]*g_stg_x[1]+g_stg[2]*g_stg_x[2]+g_stg[3]*g_stg_x[3])/(g_stg[0]+g_stg[1]+g_stg[2]+g_stg[3])
+    tw.linear.y=(g_stg[0]*g_stg_y[0]+g_stg[1]*g_stg_y[1]+g_stg[2]*g_stg_y[2]+g_stg[3]*g_stg_y[3])/(g_stg[0]+g_stg[1]+g_stg[2]+g_stg[3])#calc Centor Of Gravity Position
+    tw.linear.x=tw.linear.x*(g_vel_scales[0]/g_seat_width)
+    tw.linear.y=tw.linear.y*(g_vel_scales[1]/g_seat_length)
     return tw
 
 def send_twist():
@@ -55,9 +55,9 @@ def send_twist():
     g_twist_pub.publish(g_last_twist)
 
 def stgage_cb(msg):
-    global g_stgage
+    global g_stg
     for i in range(4):
-        g_stgage[i]=msg.data[i]
+        g_stg[i]=msg.data[i]
 
 def fetch_param(name, default):
   if rospy.has_param(name):
@@ -68,6 +68,7 @@ def fetch_param(name, default):
 
 if __name__=="__main__":
     rospy.init_node('stgage_twist')
+    g_last_twist_send_time = rospy.Time.now()
     rospy.Subscriber('stgage',Float32MultiArray,stgage_cb)
     g_twist_pub = rospy.Publisher('cmd_vel',Twist,queue_size=1)
     g_vel_scales[0] = fetch_param('~linear_scale', 1)

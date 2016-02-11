@@ -12,8 +12,9 @@ g_rate = None
 
 def ik_solver(vel,cart_angle,radius,tread,wheelr):
     global g_cart_angle,g_rate
-    l_spd = vel.linear.x * ((math.cos(cart_angle)-tread/radius * math.sin(cart_angle)) / wheelr) + vel.linear.y * ((math.sin(cart_angle)+tread/radius * math.cos(cart_angle))/wheelr)
-    r_spd = vel.linear.x * ((math.cos(cart_angle)+tread/radius * math.sin(cart_angle)) / wheelr) + vel.linear.y * ((math.sin(cart_angle)-tread/radius * math.cos(cart_angle))/wheelr)
+    w_perimeter = math.pi*2*wheelr
+    l_spd = vel.linear.x * ((math.cos(cart_angle)-tread/radius * math.sin(cart_angle)) / w_perimeter) + vel.linear.y * ((math.sin(cart_angle)+tread/radius * math.cos(cart_angle))/w_perimeter)
+    r_spd = vel.linear.x * ((math.cos(cart_angle)+tread/radius * math.sin(cart_angle)) / w_perimeter) + vel.linear.y * ((math.sin(cart_angle)-tread/radius * math.cos(cart_angle))/w_perimeter)
     w_spd = vel.linear.x * (-math.sin(cart_angle) / radius) + vel.linear.y * (math.cos(cart_angle) / radius) + vel.angular.z
     g_cart_angle += w_spd / g_rate
     if g_cart_angle >= 2*math.pi:
@@ -41,6 +42,6 @@ if __name__=='__main__':
     g_cart_angle = 0.0
     g_robot_radius = fetch_param('~active_caster_radius',0.139625)
     g_robot_tread = fetch_param('~active_caster_half_tread',0.139625)
-    g_wheel_radius = fetch_param('~wheel_radius',0.005)
+    g_wheel_radius = fetch_param('~wheel_radius',0.05)
     g_rate = fetch_param('~rate',20)
     rospy.spin()

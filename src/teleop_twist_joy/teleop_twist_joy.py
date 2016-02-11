@@ -46,8 +46,8 @@ def send_twist():
 
 def joy_cb(msg):
     global g_last_twist
-    g_target_twist.linear.y=-msg.axes[0]*g_vel_scales[0]
-    g_target_twist.linear.x=msg.axes[1]*g_vel_scales[1]
+    g_target_twist.linear.y=-msg.axes[0]*g_vel_scales[1]
+    g_target_twist.linear.x=msg.axes[1]*g_vel_scales[0]
     g_target_twist.angular.z=msg.axes[2]*g_vel_scales[2]
 
 def fetch_param(name, default):
@@ -64,11 +64,11 @@ if __name__ == '__main__':
   rospy.Subscriber('joy', Joy, joy_cb)
   g_target_twist = Twist() # initializes to zero
   g_last_twist = Twist()
-  g_vel_scales[0] = fetch_param('~linear_scale', 1)
-  g_vel_scales[1] = fetch_param('~linear_scale', 1)
+  g_vel_scales[0] = fetch_param('~linear_scale_x', 1)
+  g_vel_scales[1] = fetch_param('~linear_scale_y', 1)
   g_vel_ramps[2] = fetch_param('~angular_accel', 1)
-  g_vel_ramps[0] = fetch_param('~linear_accel', 1)
-  g_vel_ramps[1] = fetch_param('~linear_accel', 1)
+  g_vel_ramps[0] = fetch_param('~linear_accel_x', 1)
+  g_vel_ramps[1] = fetch_param('~linear_accel_y', 1)
 
   rate = rospy.Rate(20)
   while not rospy.is_shutdown():
