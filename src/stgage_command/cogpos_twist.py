@@ -28,8 +28,8 @@ def ramped_twist(prev, target, t_prev, t_now, ramps):
                             t_now, ramps[2])
     tw.linear.x = ramped_vel(prev.linear.x, target.linear.x, t_prev,
                            t_now, ramps[0])
-  #  tw.linear.y = ramped_vel(prev.linear.y, target.linear.y, t_prev,
-  #                         t_now, ramps[1])
+    tw.linear.y = ramped_vel(prev.linear.y, target.linear.y, t_prev,
+                           t_now, ramps[1])
     return tw
 #todo stop moving at buttons pushed
 def calc_vel(cogpos,vel_scales):
