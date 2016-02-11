@@ -1,0 +1,8 @@
+prefix=/home/inapi/isu_catkin_ws/devel
+
+Name: openjtalk_talker
+Description: Description of openjtalk_talker
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/inapi/isu_catkin_ws/devel/lib 
+Requires: 

@@ -1,0 +1,8 @@
+prefix=/home/inapi/isu_catkin_ws/devel
+
+Name: isu_description
+Description: Description of isu_description
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/inapi/isu_catkin_ws/devel/lib 
+Requires: 

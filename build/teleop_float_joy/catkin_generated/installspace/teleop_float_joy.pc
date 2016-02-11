@@ -1,0 +1,8 @@
+prefix=/home/inapi/isu_catkin_ws/install
+
+Name: teleop_float_joy
+Description: Description of teleop_float_joy
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/inapi/isu_catkin_ws/install/lib 
+Requires: 
