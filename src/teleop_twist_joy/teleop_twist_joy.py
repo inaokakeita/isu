@@ -66,6 +66,7 @@ if __name__ == '__main__':
   g_last_twist = Twist()
   g_vel_scales[0] = fetch_param('~linear_scale_x', 1)
   g_vel_scales[1] = fetch_param('~linear_scale_y', 1)
+  g_vel_scales[2] = fetch_param('~angular_scale_z',0.1)
   g_vel_ramps[2] = fetch_param('~angular_accel', 1)
   g_vel_ramps[0] = fetch_param('~linear_accel_x', 1)
   g_vel_ramps[1] = fetch_param('~linear_accel_y', 1)

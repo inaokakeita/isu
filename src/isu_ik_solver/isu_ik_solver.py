@@ -21,7 +21,7 @@ def ik_solver(vel,cart_angle,radius,tread,wheelr):
         g_cart_angle -= 2 * math.pi
     elif g_cart_angle <= -2 * math.pi:
         g_cart_angle += 2 * math.pi
-    axes_vel = [l_spd,r_spd,w_spd]
+    axes_vel = [l_spd,r_spd,-w_spd]
     return axes_vel
 
 def twist_cb(vel,float_pub):
