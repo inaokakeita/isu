@@ -120,6 +120,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/inapi/isu_catkin_ws/build/isu_description/cmake_install.cmake")
   include("/home/inapi/isu_catkin_ws/build/isu_ik_solver/cmake_install.cmake")
   include("/home/inapi/isu_catkin_ws/build/openjtalk_talker/cmake_install.cmake")
+  include("/home/inapi/isu_catkin_ws/build/stgage_command/cmake_install.cmake")
   include("/home/inapi/isu_catkin_ws/build/teleop_float_joy/cmake_install.cmake")
   include("/home/inapi/isu_catkin_ws/build/teleop_twist_joy/cmake_install.cmake")
 

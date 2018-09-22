@@ -802,6 +802,24 @@ openjtalk_talker/preinstall:
 .PHONY : openjtalk_talker/preinstall
 
 #=============================================================================
+# Directory level rules for directory stgage_command
+
+# Convenience name for "all" pass in the directory.
+stgage_command/all:
+
+.PHONY : stgage_command/all
+
+# Convenience name for "clean" pass in the directory.
+stgage_command/clean:
+
+.PHONY : stgage_command/clean
+
+# Convenience name for "preinstall" pass in the directory.
+stgage_command/preinstall:
+
+.PHONY : stgage_command/preinstall
+
+#=============================================================================
 # Directory level rules for directory teleop_float_joy
 
 # Convenience name for "all" pass in the directory.

@@ -357,6 +357,12 @@ sensor_msgs_DIR:PATH=/opt/ros/kinetic/share/sensor_msgs/cmake
 std_msgs_DIR:PATH=/opt/ros/kinetic/share/std_msgs/cmake
 
 //Value Computed by CMake
+stgage_command_BINARY_DIR:STATIC=/home/inapi/isu_catkin_ws/build/stgage_command
+
+//Value Computed by CMake
+stgage_command_SOURCE_DIR:STATIC=/home/inapi/isu_catkin_ws/src/stgage_command
+
+//Value Computed by CMake
 teleop_float_joy_BINARY_DIR:STATIC=/home/inapi/isu_catkin_ws/build/teleop_float_joy
 
 //Value Computed by CMake
@@ -470,7 +476,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=8
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=9
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

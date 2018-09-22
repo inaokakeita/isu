@@ -60,6 +60,13 @@
 /home/inapi/isu_catkin_ws/build/openjtalk_talker/CMakeFiles/install.dir
 /home/inapi/isu_catkin_ws/build/openjtalk_talker/CMakeFiles/test.dir
 /home/inapi/isu_catkin_ws/build/openjtalk_talker/CMakeFiles/list_install_components.dir
+/home/inapi/isu_catkin_ws/build/stgage_command/CMakeFiles/rebuild_cache.dir
+/home/inapi/isu_catkin_ws/build/stgage_command/CMakeFiles/edit_cache.dir
+/home/inapi/isu_catkin_ws/build/stgage_command/CMakeFiles/install/strip.dir
+/home/inapi/isu_catkin_ws/build/stgage_command/CMakeFiles/install/local.dir
+/home/inapi/isu_catkin_ws/build/stgage_command/CMakeFiles/install.dir
+/home/inapi/isu_catkin_ws/build/stgage_command/CMakeFiles/test.dir
+/home/inapi/isu_catkin_ws/build/stgage_command/CMakeFiles/list_install_components.dir
 /home/inapi/isu_catkin_ws/build/teleop_float_joy/CMakeFiles/rebuild_cache.dir
 /home/inapi/isu_catkin_ws/build/teleop_float_joy/CMakeFiles/edit_cache.dir
 /home/inapi/isu_catkin_ws/build/teleop_float_joy/CMakeFiles/install/strip.dir

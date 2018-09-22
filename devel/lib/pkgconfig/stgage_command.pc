@@ -1,0 +1,8 @@
+prefix=/home/inapi/isu_catkin_ws/devel
+
+Name: stgage_command
+Description: Description of stgage_command
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/inapi/isu_catkin_ws/devel/lib 
+Requires: 

@@ -7,5 +7,5 @@
 # new environment variables
 
 # modified environment variables
-export PATH="/opt/ros/kinetic/bin:/home/inapi/bin:/home/inapi/.local/bin:/home/inapi/bin:/home/inapi/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+export PATH="/opt/ros/kinetic/bin:/home/inapi/bin:/home/inapi/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 export PWD="/home/inapi/isu_catkin_ws/build"
