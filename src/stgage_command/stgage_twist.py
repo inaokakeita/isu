@@ -3,6 +3,7 @@ import rospy
 import math
 from std_msgs.msg import Float32MultiArray
 from geometry_msgs.msg import Twist
+from sensor_msgs.msg import Joy
 
 g_twist_pub = None
 g_target_twist = None 
@@ -15,6 +16,7 @@ g_seat_width=0.2
 g_seat_length=0.2
 g_stg_x = [0.0, 0.2, 0.2, 0.0]#straigngage sensor position 
 g_stg_y = [0.0, 0.0, 0.2, 0.2]
+g_rate = 0
 
 def ramped_vel(v_prev, v_target, t_prev, t_now, ramp_rate):
   # compute maximum velocity step
@@ -71,14 +73,15 @@ if __name__=="__main__":
     g_last_twist_send_time = rospy.Time.now()
     rospy.Subscriber('stgage',Float32MultiArray,stgage_cb)
     g_twist_pub = rospy.Publisher('cmd_vel',Twist,queue_size=1)
-    g_vel_scales[0] = fetch_param('~linear_scale', 1)
-    g_vel_scales[1] = fetch_param('~linear_scale', 1)
+    g_vel_scales[0] = fetch_param('~linear_scale_x', 1)
+    g_vel_scales[1] = fetch_param('~linear_scale_y', 1)
     g_vel_ramps[2] = fetch_param('~angular_accel', 1)
-    g_vel_ramps[0] = fetch_param('~linear_accel', 1)
-    g_vel_ramps[1] = fetch_param('~linear_accel', 1)
+    g_vel_ramps[0] = fetch_param('~linear_accel_x', 1)
+    g_vel_ramps[1] = fetch_param('~linear_accel_y', 1)
+    g_rate = fetch_param('~rate',20)
     g_target_twist = Twist() # initializes to zero
     g_last_twist = Twist()
-    rate = rospy.Rate(20)
+    rate = rospy.Rate(g_rate)
     while not rospy.is_shutdown():
         send_twist()
         rate.sleep()
