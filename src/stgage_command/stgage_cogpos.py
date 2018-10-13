@@ -35,7 +35,7 @@ def stgage_cb(msg):
 
 def joy_cb(msg):
     global g_stg_init_flg
-    if g_joy.buttons[4]==1 and g_joy.buttons[5]==1:
+    if g_joy.buttons[6]==1 and g_joy.buttons[7]==1:
         g_stg_init_flg = not(g_stg_init_flg)
         rospy.sleep(0.5)
       
