@@ -11,15 +11,8 @@ g_last_twist = None
 g_last_send_time = None
 g_vel_scales = [0.1, 0.1, 0.1]
 g_vel_ramps = [1, 1, 1] # units: meters per second^2
-g_stg = [0.01, 0.01, 0.01, 0.01] #stgage sensor raw data
-g_cog_offset = [0.0,0.0]
-g_seat_width=0.2
-g_seat_length=0.2
-g_stg_x = [0.0, 0.2, 0.2, 0.0]#straigngage sensor position 
-g_stg_y = [0.0, 0.0, 0.2, 0.2]
-g_rate = 20
+g_cogpos = Float32MultiArray()#Centor Of Gravity Position on seat [x,y]
 g_joy = Joy()
-g_cog_init_flg = 1
 
 def ramped_vel(v_prev, v_target, t_prev, t_now, ramp_rate):
   # compute maximum velocity step
@@ -41,39 +34,31 @@ def ramped_twist(prev, target, t_prev, t_now, ramps):
                            t_now, ramps[1])
     return tw
 #todo stop moving at buttons pushed
-def calc_vel(seat_length, seat_width, stg,stg_x,stg_y,vel_scales):
+def calc_vel(cogpos,joy,vel_scales):
     tw = Twist()
-    cog[0] =(stg[0]*stg_x[0]+stg[1]*stg_x[1]+stg[2]*stg_x[2]+stg[3]*stg_x[3])/(stg[0]+stg[1]+stg[2]+stg[3])
-    cog[1]=(stg[0]*stg_y[0]+stg[1]*stg_y[1]+stg[2]*stg_y[2]+stg[3]*stg_y[3])/(stg[0]+stg[1]+stg[2]+stg[3])#calc Centor Of Gravity Position
-    #init cog
-    if  g_cog_init_flg == 1:
-        cog[0] = 0.0
-        cog[1] = 0.0
-    tw.linear.x=cog[0]*(vel_scales[0]/seat_width)
-    tw.linear.y=cog[1]*(vel_scales[1]/seat_length)
+    tw.linear.x=cogpos[0]*vel_scales[0]
+    tw.linear.y=cogpos[1]*vel_scales[1]
+    tw.angular.z = joy.axes[2]*vel_scales[2]
     return tw
 
 def send_twist():
     global g_last_twist_send_time, g_target_twist, g_last_twist,\
-            g_vel_ramps, g_twist_pub,g_seat_length, g_seat_width, \
-            g_stg,g_stg_x,g_stg_y,g_vel_scales
-    g_last_twist=calc_vel(g_seat_length, g_seat_width, g_stg,g_stg_x,g_stg_y,g_vel_scales)
+            g_vel_ramps, g_twist_pub,g_cogpos,g_joy,g_vel_scales
+    g_last_twist=calc_vel(g_cogpos,g_joy,g_vel_scales)
     t_now = rospy.Time.now()
     g_last_twist = ramped_twist(g_last_twist, g_target_twist,
                               g_last_twist_send_time, t_now, g_vel_ramps)
     g_last_twist_send_time = t_now
     g_twist_pub.publish(g_last_twist)
 
-def stgage_cb(msg):
-    global g_stg
-    for i in range(4):
-        g_stg[i]=msg.data[i]
+def cogpos_cb(msg):
+    global g_cogpos
+    g_cogpos = msg
+    send_twist()
 
 def joy_cb(msg):
-    global g_joy
-    g_joy = msg
-    if msg.buttons[4]==1 and msg.buttons[5]==1:
-      g_cog_init_flg != g_cog_init_flg
+  global g_joy
+  g_joy = msg
 
 def fetch_param(name, default):
   if rospy.has_param(name):
@@ -83,20 +68,16 @@ def fetch_param(name, default):
     return default
 
 if __name__=="__main__":
-    rospy.init_node('stgage_twist')
+    rospy.init_node('cogpos_twist')
     g_last_twist_send_time = rospy.Time.now()
-    rospy.Subscriber('stgage',Float32MultiArray,stgage_cb)
-    rospy.Subscriber('joy',Joy,joy_cb)
+    rospy.Subscriber('cogpos',Float32MultiArray,cogpos_cb)
+    rospy.Subscriber('joy'Joy,joy_cb)
     g_twist_pub = rospy.Publisher('cmd_vel',Twist,queue_size=1)
     g_vel_scales[0] = fetch_param('~linear_scale_x', 1)
     g_vel_scales[1] = fetch_param('~linear_scale_y', 1)
     g_vel_ramps[2] = fetch_param('~angular_accel', 1)
     g_vel_ramps[0] = fetch_param('~linear_accel_x', 1)
     g_vel_ramps[1] = fetch_param('~linear_accel_y', 1)
-    g_rate = fetch_param('~rate',20)
     g_target_twist = Twist() # initializes to zero
     g_last_twist = Twist()
-    rate = rospy.Rate(g_rate)
-    while not rospy.is_shutdown():
-        send_twist()
-        rate.sleep()
+    rospy.spin()
