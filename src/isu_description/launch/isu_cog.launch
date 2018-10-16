@@ -7,12 +7,13 @@
         <node pkg='rosserial_python' name='stgage_node' type='serial_node.py'>
             <param name='port' value='tcp'/>
         </node>
-        <node pkg="stgage_command" name="stg_to_twist" type="stgage_twist.py">
+        <node pkg="stgage_command" name="cogpos_to_twist" type="cogpos_twist.py">
             <param name="linear_accel_x" value="0.3"/>
             <param name="linear_accel_y" value="0.3"/>
             <param name="linear_scale_x" value="0.5"/>
             <param name="linear_scale_y" value="0.5"/>
         </node>
+        <node pkg="stgage_command" name="stg_to_cogpos" type="stgage_cogpos.py"/>
         <node pkg="isu_ik_solver" name="ik_solver_node" type="isu_ik_solver.py"/>
         <node pkg="rosserial_python" name="motcontroller" type="serial_node.py">
             <param name="port" value="/dev/ttyS0"/>
