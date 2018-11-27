@@ -12,6 +12,7 @@ g_vel_scales = [0.1, 0.1, 0.1]
 g_vel_ramps = [1, 1, 1] # units: meters per second^2 [x,y,z]
 g_vel_max = [0.0,0.0,0.0] #units: meter per second [x,y,z] 
 g_cogpos = Float32MultiArray()#Centor Of Gravity Position on seat [x,y]
+g_deadzone = [0.1,0.1]
 
 def ramped_vel(v_prev, v_target, t_prev, t_now, ramp_rate):
   # compute maximum velocity step
@@ -33,25 +34,36 @@ def ramped_twist(prev, target, t_prev, t_now, ramps, max):
                            t_now, ramps[1])
     return tw
 
-def calc_vel(cogpos,vel_scales,vel_max):
+def calc_vel(cogpos,vel_scales,vel_max,deadzone):
     tw = Twist()
+    #mapping cogpos to velocity
     tw.linear.x=cogpos.data[0]*vel_scales[0]
     tw.linear.y=-cogpos.data[1]*vel_scales[1]
+    #set maxspeed
     if tw.linear.x > vel_max[0]:
        tw.linear.x = vel_max[0]
     elif tw.linear.x < -vel_max[0]:
       tw.linear.x = -vel_max[0]
-  
     if tw.linear.y > vel_max[1]:
       tw.linear.y = vel_max[1]
     elif tw.linear.y < -vel_max[1]:
       tw.linear.y = -vel_max[1]
+    #set dead zone
+    if tw.linear.x < deadzone[0]:
+      tw.linear.x = deadzone[0]
+    if tw.linear.y < deadzone[1]&tw.linear.y > 0.0:
+      tw.linear.y = deadzone[1]
+    elif tw.linear.y > -deadzone[1]&tw.linear.y < 0.0:
+      tw.linear.y = -deadzone[1]
+    #forbid back
+    if tw.linear.x < 0.0:
+      tw.linear.x = 0.0
     return tw
 
 def send_twist():
     global g_last_twist_send_time, g_target_twist, g_last_twist,\
-            g_vel_ramps, g_twist_pub,g_cogpos,g_vel_scales,g_vel_max
-    g_target_twist=calc_vel(g_cogpos,g_vel_scales,g_vel_max)
+            g_vel_ramps, g_twist_pub,g_cogpos,g_vel_scales,g_vel_max,g_deadzone
+    g_target_twist=calc_vel(g_cogpos,g_vel_scales,g_vel_max,g_deadzone)
     t_now = rospy.Time.now()
     g_last_twist = ramped_twist(g_last_twist, g_target_twist,
                               g_last_twist_send_time, t_now, g_vel_ramps,g_vel_max)
