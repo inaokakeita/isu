@@ -26,8 +26,8 @@ def ramped_vel(v_prev, v_target, t_prev, t_now, ramp_rate):
 
 def ramped_twist(prev, target, t_prev, t_now, ramps, max):
     tw = Twist()
-  #  tw.angular.z = ramped_vel(prev.angular.z, target.angular.z, t_prev,
-  #                          t_now, ramps[2])
+    tw.angular.z = ramped_vel(prev.angular.z, target.angular.z, t_prev,
+                            t_now, ramps[2])
     tw.linear.x = ramped_vel(prev.linear.x, target.linear.x, t_prev,
                            t_now, ramps[0])
     tw.linear.y = ramped_vel(prev.linear.y, target.linear.y, t_prev,
@@ -39,6 +39,9 @@ def calc_vel(cogpos,vel_scales,vel_max,deadzone):
     #mapping cogpos to velocity
     tw.linear.x=cogpos.data[0]*vel_scales[0]
     tw.linear.y=-cogpos.data[1]*vel_scales[1]
+
+    #vel_angle = math.atan2(tw.linear.y/tw.linear.x)
+    #vel_r = sqrt(pow(tw.linear.x,2)+pow(tw.linear.y,2))
     #set maxspeed
     if tw.linear.x > vel_max[0]:
        tw.linear.x = vel_max[0]
@@ -48,16 +51,19 @@ def calc_vel(cogpos,vel_scales,vel_max,deadzone):
       tw.linear.y = vel_max[1]
     elif tw.linear.y < -vel_max[1]:
       tw.linear.y = -vel_max[1]
-    #set dead zone
+    #mapping rotate
+    tw.angular.z
+    #set dead one
     if tw.linear.x < deadzone[0]:
-      tw.linear.x = deadzone[0]
-    if tw.linear.y < deadzone[1]&tw.linear.y > 0.0:
-      tw.linear.y = deadzone[1]
-    elif tw.linear.y > -deadzone[1]&tw.linear.y < 0.0:
-      tw.linear.y = -deadzone[1]
+      tw.linear.x = 0.0
+    if tw.linear.y < deadzone[1] and tw.linear.y > 0.0:
+      tw.linear.y = 0.0
+    elif tw.linear.y > -deadzone[1] and tw.linear.y < 0.0:
+      tw.linear.y = 0.0
     #forbid back
     if tw.linear.x < 0.0:
       tw.linear.x = 0.0
+      tw.linear.y = 0.0
     return tw
 
 def send_twist():
@@ -92,6 +98,8 @@ if __name__=="__main__":
     g_vel_max[0] = fetch_param('~linear_maxspeed_x',0.1)
     g_vel_max[1] = fetch_param('~linear_maxspeed_y',0.1)
     g_vel_max[2] = fetch_param('~angular_maxspeed_z',0.1)
+    g_deadzone[0] = fetch_param('~deadzone_x',0.1)
+    g_deadzone[1] = fetch_param('~deadzone_y',0.1)
     g_last_twist_send_time = rospy.Time.now()
     g_target_twist = Twist() # initializes to zero 
     g_last_twist = Twist()
